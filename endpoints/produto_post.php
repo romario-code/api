@@ -1,5 +1,6 @@
 <?php 
 
+// Função para criar um produto
 function api_produto_post($request) {
     $user = wp_get_current_user();  
     $user_id = $user->ID;
@@ -28,9 +29,9 @@ function api_produto_post($request) {
       $produto_id = wp_insert_post($response);
       $response['id'] = get_post_field('post_name', $produto_id);
 
-      $file = $request->get_file_params();
+      $files = $request->get_file_params();
 
-      if ($file) {
+      if ($files) {
         require_once(ABSPATH . 'wp-admin/includes/image.php');
         require_once(ABSPATH . 'wp-admin/includes/file.php');
         require_once(ABSPATH . 'wp-admin/includes/media.php');
@@ -53,7 +54,7 @@ function api_produto_post($request) {
 function register_api_produto_post() {
     register_rest_route( 'api/v1', '/produto', array(
         array(
-            'methods' => WP_REST_Server::EDITABLE,
+            'methods' => WP_REST_Server::CREATABLE,
             'callback' => 'api_produto_post',
         ),
     ) );
